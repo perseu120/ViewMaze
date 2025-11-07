@@ -4,6 +4,7 @@ import Footer from '../../componetes/footer';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useGlobalContext } from '../../context/Context';
+import { Link } from "react-router-dom";
 
 export default function Home() {
 
@@ -13,36 +14,36 @@ export default function Home() {
     const fetchMovies = useCallback(
         async () => {
 
-        try {
-            const res = await axios.get(`https://api.tvmaze.com/shows?page=${page}`);
+            try {
+                const res = await axios.get(`https://api.tvmaze.com/shows?page=${page}`);
 
-            if (res.status === 200) setMovies(res.data);
-        } catch (erro) {
-            console.error("Erro ao buscar filmes:", erro);
-        }
-        
-    },[page])
+                if (res.status === 200) setMovies(res.data);
+            } catch (erro) {
+                console.error("Erro ao buscar filmes:", erro);
+            }
+
+        }, [page])
 
     useEffect(() => {
 
         fetchMovies();
 
-    }, [page,fetchMovies]);
+    }, [page, fetchMovies]);
 
-     const searchMovie = useCallback(async (query) =>{
+    const searchMovie = useCallback(async (query) => {
         try {
 
-            if(query){
-                
+            if (query) {
+
                 const res = await axios.get(`https://api.tvmaze.com/search/shows?q=${query}`);
-                
-                if (res.status === 200 && res.data.length){
-                    setMovies(res.data.map(({show})=>{
+
+                if (res.status === 200 && res.data.length) {
+                    setMovies(res.data.map(({ show }) => {
                         return show;
                     }));
-                } 
-                
-            }else{
+                }
+
+            } else {
                 fetchMovies();
             }
 
@@ -50,7 +51,7 @@ export default function Home() {
         } catch (erro) {
             console.error("Erro ao buscar filmes:", erro);
         }
-    },[fetchMovies]); 
+    }, [fetchMovies]);
 
     return (
         <div class="bg-[#0c0b0b]">
@@ -64,16 +65,18 @@ export default function Home() {
                 ) : (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 group-hover:opacity-75 " >
                         {movies.map((movies) => (
-                            <div key={movies.id} className="border rounded-lg p-2 text-center shadow hover:opacity-50 transition-opacity">
-                                <img
-                                    src={movies.image?.medium}
-                                    alt={movies.name}
-                                    className="w-full h-64 object-cover rounded"
-                                />
-                                <h2 className="font-semibold mt-2 text-gray-300">{movies.name}</h2>
-                                <p className="text-sm text-gray-500">{movies.language}</p>
-                                <p className="text-xs text-gray-400">{movies.genres.join(", ")}</p>
-                            </div>
+                            <Link key={movies.id} to={`/filme/${movies.id}`}>
+                                <div  className="border rounded-lg p-2 text-center shadow hover:opacity-50 transition-opacity">
+                                    <img
+                                        src={movies.image?.medium}
+                                        alt={movies.name}
+                                        className="w-full h-64 object-cover rounded"
+                                    />
+                                    <h2 className="font-semibold mt-2 text-gray-300">{movies.name}</h2>
+                                    <p className="text-sm text-gray-500">{movies.language}</p>
+                                    <p className="text-xs text-gray-400">{movies.genres.join(", ")}</p>
+                                </div>
+                            </Link>
                         ))}
                     </div>
                 )}
