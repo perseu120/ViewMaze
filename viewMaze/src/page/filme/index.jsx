@@ -7,6 +7,22 @@ export default function FilmeDetail() {
     const { id } = useParams();
     const [movie, setMovie] = useState([]);
     const [season, setSeason] = useState([]);
+    const [episode, setEpisode] = useState([]);
+    const [renderEp, setRenderEp] = useState(false);
+
+
+    const handleSeasonClick = async (id) => {
+        try {
+            console.log("ID da temporada:", id);
+            const res = await axios.get(`https://api.tvmaze.com/seasons/${id}/episodes`);
+            if (res.status === 200) {
+                setEpisode(res.data);
+                console.log("Episódios carregados:", episode);
+            }
+        } catch (error) {
+            console.error("Erro ao buscar episódios:", error);
+        }
+    };
 
     const showSeason = useCallback(
         async () => {
@@ -21,7 +37,7 @@ export default function FilmeDetail() {
             }
 
         }, [])
-    
+
 
     useEffect(() => {
 
@@ -43,7 +59,7 @@ export default function FilmeDetail() {
 
     return (
 
-        <div class="bg-[#0c0b0b]  h-screen">
+        <div class="bg-gray-900 h-screen">
             <div class="min-h-full">
 
 
@@ -55,9 +71,9 @@ export default function FilmeDetail() {
                             <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">{movie.name}</h1>
                             <p class="mt-4 text-xl text-gray-500">{movie.summary}</p>
                             <p class="mt-4 text-xl text-gray-500">{movie.genres ? movie.genres.join(", ") : "Sem gênero"}</p>
-                            <p className="mt-4 text-xl text-gray-500">{movie.schedule?.days?.length? `${movie.ended} ${movie.schedule.days.join(", ")} - ${movie.schedule.time}`: "Sem horário definido"}
+                            <p className="mt-4 text-xl text-gray-500">{movie.schedule?.days?.length ? `${movie.ended} ${movie.schedule.days.join(", ")} - ${movie.schedule.time}` : "Sem horário definido"}
                             </p>
-                            <p class="mt-4 text-xl text-gray-500">⭐ Avaliação: {movie.rating?.average || "Sem nota"}</p>
+                            <p class="mt-4  mb-4 text-xl text-gray-500">⭐ Avaliação: {movie.rating?.average || "Sem nota"}</p>
                         </div>
                     </div>
                     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-8 lg:px-8">
@@ -76,9 +92,9 @@ export default function FilmeDetail() {
                                     <div class="ml-10 flex items-baseline space-x-4">
                                         {season.map((season) => (
 
-                                            <a key={season.id} href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{season.number}</a>
+                                            <button key={season.id} onClick={() => { setRenderEp(true), handleSeasonClick(season.id) }} href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{season.number}</button>
                                         ))}
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -86,33 +102,34 @@ export default function FilmeDetail() {
 
                         </div>
                     </div>
-                    {/* 
-                    <el-disclosure id="mobile-menu" hidden class="block md:hidden"> 
-                        <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-
-                            <a href="#" aria-current="page" class="block rounded-md bg-gray-950/50 px-3 py-2 text-base font-medium text-white">Dashboard</a>
-                            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Team</a>
-                            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Projects</a>
-                            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Calendar</a>
-                            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Reports</a>
-                        </div>
-                        <div class="border-t border-white/10 pt-4 pb-3">
-
-                            <div class="mt-3 space-y-1 px-2">
-                                <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Your profile</a>
-                                <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Settings</a>
-                                <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Sign out</a>
-                            </div>
-                        </div>
-                    </el-disclosure> */}
 
 
                 </nav>
-                <main>
-                    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                {!renderEp ? (
+                    <p></p>
+                ) :
 
-                    </div>
-                </main>
+
+                    <main className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 group-hover:opacity-75 w-auto h-auto bg-gray-800 p-4 rounded-lg" >
+                        {episode.map((ep) => {
+                            return <div key={ep.id} className="border border-gray-700 rounded-lg p-2 text-center bg-gray-800 shadow hover:opacity-80 transition-opacity">
+                                <div className="aspect-video w-full overflow-hidden rounded-md">
+                                    <img
+                                        src={ep.image?.medium}
+                                        alt="Episódio"
+                                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                    />
+                                </div>
+                                <h2 className="font-semibold mt-2 text-gray-200 text-sm truncate">{ep.name}</h2>
+                                <p className="text-xs text-gray-400">{ep.number}</p>
+                            </div>
+
+                        })}
+                    </main>
+
+
+                }
+
 
             </div>
         </div>
