@@ -1,59 +1,78 @@
+
 import Header from '../../componetes/head/index'
 import Footer from '../../componetes/footer';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useGlobalContext } from '../../context/Context';
 
 export default function Home() {
 
-    const [filmes, setFilmes] = useState([]);
-    // const [pagina, setPagina] = useState(10);
+    const [movies, setMovies] = useState([]);
+    const { page } = useGlobalContext();
 
+    const fetchMovies = useCallback(
+        async () => {
+
+        try {
+            const res = await axios.get(`https://api.tvmaze.com/shows?page=${page}`);
+
+            if (res.status === 200) setMovies(res.data);
+        } catch (erro) {
+            console.error("Erro ao buscar filmes:", erro);
+        }
+        
+    },[page])
 
     useEffect(() => {
 
-        const buscarFilmes = async () => {
+        fetchMovies();
 
-            try {
-                // cria um array de 10 requisições (IDs de 1 a 10, por exemplo)
-                const requisicoes = Array.from({ length: 10 }, (_, i) =>
-                    axios.get(`https://api.tvmaze.com/shows/${i + 1}`)
-                );
+    }, [page,fetchMovies]);
 
-                const respostas = await Promise.all(requisicoes);
+     const searchMovie = useCallback(async (query) =>{
+        try {
 
-                const dados = respostas.map((res) => res.data);
-                setFilmes(dados);
-
-            } catch (erro) {
-                console.error("Erro ao buscar filmes:", erro);
+            if(query){
+                
+                const res = await axios.get(`https://api.tvmaze.com/search/shows?q=${query}`);
+                
+                if (res.status === 200 && res.data.length){
+                    setMovies(res.data.map(({show})=>{
+                        return show;
+                    }));
+                } 
+                
+            }else{
+                fetchMovies();
             }
+
+
+        } catch (erro) {
+            console.error("Erro ao buscar filmes:", erro);
         }
-
-        buscarFilmes();
-
-    }, [])
+    },[fetchMovies]); 
 
     return (
-        <div class="bg-0c0b0b">
-            <Header />
+        <div class="bg-[#0c0b0b]">
+            <Header searchMovie={searchMovie} />
 
             <div className="p-6 mb-15">
                 <h1 className="text-2xl font-bold mb-4 bg-linear-to-r from-pink-500 to-violet-500 bg-clip-text font-extrabold text-transparent ">Filmes e series</h1>
 
-                {filmes.length === 0 ? (
+                {movies.length === 0 ? (
                     <p>Carregando...</p>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                        {filmes.map((filme) => (
-                            <div key={filme.id} className="border rounded-lg p-2 text-center shadow">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 group-hover:opacity-75 " >
+                        {movies.map((movies) => (
+                            <div key={movies.id} className="border rounded-lg p-2 text-center shadow hover:opacity-50 transition-opacity">
                                 <img
-                                    src={filme.image?.medium}
-                                    alt={filme.name}
+                                    src={movies.image?.medium}
+                                    alt={movies.name}
                                     className="w-full h-64 object-cover rounded"
                                 />
-                                <h2 className="font-semibold mt-2 text-gray-300">{filme.name}</h2>
-                                <p className="text-sm text-gray-500">{filme.language}</p>
-                                <p className="text-xs text-gray-400">{filme.genres.join(", ")}</p>
+                                <h2 className="font-semibold mt-2 text-gray-300">{movies.name}</h2>
+                                <p className="text-sm text-gray-500">{movies.language}</p>
+                                <p className="text-xs text-gray-400">{movies.genres.join(", ")}</p>
                             </div>
                         ))}
                     </div>

@@ -1,35 +1,69 @@
+import { useMemo } from "react";
+import { useGlobalContext } from "../../context/Context";
+
 
 export default function Footer() {
+
+    const {page, setPage} = useGlobalContext();
+    const buttonPageList = useMemo(()=>{
+
+        const aux = [];
+        for(let i = 1; i <= 5; i++){
+            if(page-i > 0 ){
+                aux.unshift({value:page-i, label:page-i+1});
+            }
+        };
+        aux.push({value:page, label:page+1});
+
+        for(let i = 1; i <= 5; i++){
+            
+            aux.push({value:page+i, label:page+i+1});
+            
+        };
+
+        console.log(page);
+        return aux;
+
+    },[page]);
+
+    function handleNextPage(){
+        setPage(page+1);
+    }
+    function handlePreviousPage(){
+
+        if(page > 0 ){
+            setPage(page-1);
+        }
+    }
+
+
     return (
         <>
-            <div class="fixed bottom-0 left-0 w-full bg-gray-800 text-white text-center py-3 flex items-center justify-between border-t border-white/10 px-4 py-3 sm:px-6">
-                <div class="flex flex-1 justify-between sm:hidden">
-                    <a href="#" class="relative inline-flex items-center rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-white/10">Previous</a>
-                    <a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-white/10">Next</a>
-                </div>
+            <div class="fixed bottom-0 left-0 w-full bg-[#0c0b0b] text-white text-center py-3 flex items-center justify-between border-t border-white/10 px-4 py-3 sm:px-6 bg-[#0c0b0b]">
+              
                 <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                     <div>
                         <nav aria-label="Pagination" class="isolate inline-flex -space-x-px rounded-md">
-                            <a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">
+                            <button onClick={ handlePreviousPage } class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">
                                 <span class="sr-only">Previous</span>
                                 <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
                                     <path d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" fill-rule="evenodd" />
                                 </svg>
-                            </a>
+                            </button>
                             
-                            <a href="#" aria-current="page" class="relative z-10 inline-flex items-center bg-indigo-500 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">1</a>
-                            <a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">2</a>
-                            <a href="#" class="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0 md:inline-flex">3</a>
-                            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-400 inset-ring inset-ring-gray-700 focus:outline-offset-0">...</span>
-                            <a href="#" class="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0 md:inline-flex">8</a>
-                            <a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">9</a>
-                            <a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">10</a>
-                            <a href="#" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">
+                            {
+                                buttonPageList.length && buttonPageList.map((button)=>{
+                                    return <button onClick={()=>setPage(button.value)} aria-current="page" class={`relative z-10 inline-flex items-center bg-[#0c0b0b] px-4 py-2 text-sm font-semibold text-white ${ page == button.value && "border-solid border-purple-500 border-4"}`}>{button?.label}</button>
+                                })
+                            }
+                            
+                            
+                            <button onClick={ handleNextPage } class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">
                                 <span class="sr-only">Next</span>
                                 <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
                                     <path d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
                                 </svg>
-                            </a>
+                            </button>
                         </nav>
                     </div>
                 </div>
