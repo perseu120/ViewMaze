@@ -53,7 +53,7 @@ export default function Footer() {
                             
                             {
                                 buttonPageList.length && buttonPageList.map((button)=>{
-                                    return <button onClick={()=>setPage(button.value)} aria-current="page" className={`relative z-10 inline-flex items-center bg-[#0c0b0b] px-4 py-2 text-sm font-semibold text-white ${ page == button.value && "border-solid border-purple-500 border-4"}`}>{button?.label}</button>
+                                    return <button key={button.value} onClick={()=>setPage(button.value)} aria-current="page" className={`relative z-10 inline-flex items-center bg-[#0c0b0b] px-4 py-2 text-sm font-semibold text-white ${ page == button.value && "border-solid border-purple-500 border-4"}`}>{button?.label}</button>
                                 })
                             }
                             

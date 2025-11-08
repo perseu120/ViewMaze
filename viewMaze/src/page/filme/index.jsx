@@ -71,12 +71,12 @@ export default function FilmeDetail() {
 
                     <div className="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
                         <div className="sm:max-w-lg">
-                            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">{movie.name}</h1>
-                            <p className="mt-4 text-xl text-gray-500">{movie.summary}</p>
-                            <p className="mt-4 text-xl text-gray-500">{movie.genres ? movie.genres.join(", ") : "Sem gênero"}</p>
-                            <p className="mt-4 text-xl text-gray-500">{movie.schedule?.days?.length ? `${movie.ended} ${movie.schedule.days.join(", ")} - ${movie.schedule.time}` : "Sem horário definido"}
+                            <h1 key={"1"} className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">{movie.name}</h1>
+                            <p key={"2"}  className="mt-4 text-xl text-gray-500">{movie.summary}</p>
+                            <p key={"3"}  className="mt-4 text-xl text-gray-500">{movie.genres ? movie.genres.join(", ") : "Sem gênero"}</p>
+                            <p key={"4"}  className="mt-4 text-xl text-gray-500">{movie.schedule?.days?.length ? `${movie.ended} ${movie.schedule.days.join(", ")} - ${movie.schedule.time}` : "Sem horário definido"}
                             </p>
-                            <p className="mt-4  mb-4 text-xl text-gray-500">⭐ Avaliação: {movie.rating?.average || "Sem nota"}</p>
+                            <p key={"5"}  className="mt-4  mb-4 text-xl text-gray-500">⭐ Avaliação: {movie.rating?.average || "Sem nota"}</p>
                         </div>
                     </div>
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-8 lg:px-8">
@@ -87,11 +87,11 @@ export default function FilmeDetail() {
 
                 </header>
 
-                <nav className="bg-gray-800/50">
+                <nav  className="bg-gray-800/50">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-16 items-center justify-between">
                             <div className="flex items-center">
-                                <div>
+                                <div >
                                     <div className="ml-10 flex items-baseline space-x-4">
                                         {season.map((season) => (
 
