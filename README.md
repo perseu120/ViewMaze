@@ -1,1 +1,1 @@
-projeto para consumit a api TVMaze
+projeto para consumir a api TVMaze
