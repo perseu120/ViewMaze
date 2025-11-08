@@ -62,40 +62,40 @@ export default function FilmeDetail() {
 
     return (
 
-        <div class="bg-gray-900 h-screen">
-            <div class="min-h-full">
+        <div className="bg-gray-900 h-screen">
+            <div className="min-h-full">
 
 
-                <header class="flex bg-gray-800 after:pointer-events-none  after:inset-x-0 after:inset-y-0 after:border-y after:border-white/10">
+                <header className="flex bg-gray-800 after:pointer-events-none  after:inset-x-0 after:inset-y-0 after:border-y after:border-white/10">
 
 
-                    <div class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
-                        <div class="sm:max-w-lg">
-                            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">{movie.name}</h1>
-                            <p class="mt-4 text-xl text-gray-500">{movie.summary}</p>
-                            <p class="mt-4 text-xl text-gray-500">{movie.genres ? movie.genres.join(", ") : "Sem gênero"}</p>
+                    <div className="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
+                        <div className="sm:max-w-lg">
+                            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">{movie.name}</h1>
+                            <p className="mt-4 text-xl text-gray-500">{movie.summary}</p>
+                            <p className="mt-4 text-xl text-gray-500">{movie.genres ? movie.genres.join(", ") : "Sem gênero"}</p>
                             <p className="mt-4 text-xl text-gray-500">{movie.schedule?.days?.length ? `${movie.ended} ${movie.schedule.days.join(", ")} - ${movie.schedule.time}` : "Sem horário definido"}
                             </p>
-                            <p class="mt-4  mb-4 text-xl text-gray-500">⭐ Avaliação: {movie.rating?.average || "Sem nota"}</p>
+                            <p className="mt-4  mb-4 text-xl text-gray-500">⭐ Avaliação: {movie.rating?.average || "Sem nota"}</p>
                         </div>
                     </div>
-                    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-8 lg:px-8">
-                        <div class="h-64 w-44 rounded-lg ">
+                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-8 lg:px-8">
+                        <div className="h-64 w-44 rounded-lg ">
                             <img src={movie.image?.original || "Sem imagem"} alt="" />
                         </div>
                     </div>
 
                 </header>
 
-                <nav class="bg-gray-800/50">
-                    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                        <div class="flex h-16 items-center justify-between">
-                            <div class="flex items-center">
+                <nav className="bg-gray-800/50">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div className="flex h-16 items-center justify-between">
+                            <div className="flex items-center">
                                 <div>
-                                    <div class="ml-10 flex items-baseline space-x-4">
+                                    <div className="ml-10 flex items-baseline space-x-4">
                                         {season.map((season) => (
 
-                                            <button key={season.id} onClick={() => { setRenderEp(true), handleSeasonClick(season.id) }} href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{season.number}</button>
+                                            <button key={season.id} onClick={() => { setRenderEp(true), handleSeasonClick(season.id) }} href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{season.number}</button>
                                         ))}
 
                                     </div>
@@ -105,7 +105,6 @@ export default function FilmeDetail() {
 
                         </div>
                     </div>
-
 
                 </nav>
                 {!renderEp ? (
@@ -143,7 +142,7 @@ export default function FilmeDetail() {
                                         leaveFrom="opacity-100"
                                         leaveTo="opacity-0"
                                     >
-                                        <div className="fixed inset-0 bg-black bg-opacity-50" />
+                                        <div className="fixed inset-0 bg-opacity-20" />
                                     </Transition.Child>
 
                                     <div className="fixed inset-0 overflow-y-auto">
